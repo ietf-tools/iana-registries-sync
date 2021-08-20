@@ -36,7 +36,7 @@ jobs:
           rsync -avciz --delete-before \
             --exclude '.git*' \
             --exclude 'README.*' \
-            rsync.ietf.org::assignments .
+            rsync.iana.org::assignments .
 
       - name: Git diff
         working-directory: iana-registries
