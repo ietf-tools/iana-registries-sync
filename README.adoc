@@ -2,7 +2,7 @@
 
 This work is created under the IETF/Ribose BibXML services SOW.
 
-image:https://github.com/ietf-ribose/iana-registries/workflows/import/badge.svg["Last import", link="https://github.com/ietf-ribose/iana-registries/actions?workflow=import"]
+image:https://github.com/ietf-ribose/iana-registries-sync/workflows/import/badge.svg["Last import", link="https://github.com/ietf-ribose/iana-registries-sync/actions?workflow=import"]
 
 == Purpose
 
@@ -10,7 +10,7 @@ This repository acts as a mirror to official IANA Registries data.
 
 This data is then used for generating BibXML bibliographic entries for each IANA
 registry and pushed to the
-https://github.com/ietf-ribose/bibxml-iana[bibxml-iana] repository.
+https://github.com/ietf-ribose/iana-registries[iana-registries] repository.
 
 The origin of data is:
 
