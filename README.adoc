@@ -1,0 +1,38 @@
+= IANA Registries mirror
+
+This work is created under the IETF/Ribose BibXML services SOW.
+
+image:https://github.com/ietf-ribose/iana-registries/workflows/import/badge.svg["Last import", link="https://github.com/ietf-ribose/iana-registries/actions?workflow=import"]
+
+== Purpose
+
+This repository acts as a mirror to official IANA Registries data.
+
+This data is then used for generating BibXML bibliographic entries for each IANA
+registry and pushed to the
+https://github.com/ietf-ribose/bibxml-iana[bibxml-iana] repository.
+
+The origin of data is:
+
+* `rsync.iana.org::assignments` (publicly accessible)
+
+== Usage
+
+The `import` workflow runs daily at 1am UTC, and does the following:
+
+* Checks out the latest data of
+  https://github.com/ietf-ribose/iana-registries[iana-registries]
+
+* Runs `rsync` from `rsync.iana.org` to obtain the latest IANA registries data,
+  overriding the data of the Git iana-registries
+
+** The `README.*` and `.git*` paths are protected from `rsync`, meaning that
+   these files in iana-registries will not be removed by `rsync` (since the `rsync`
+   source does not have them).
+
+* Compares the changes made and commits them, and pushes any changes
+  back to https://github.com/ietf-ribose/iana-registries[iana-registries]
+
+== License
+
+Openly licensed.
