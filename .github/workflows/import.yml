@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '0 1 * * *'  # every day at 1:00
+    - cron: '10 * * * *'  # every hour at *:10
 
 jobs:
   import:
