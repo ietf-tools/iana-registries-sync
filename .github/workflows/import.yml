@@ -54,7 +54,7 @@ jobs:
         working-directory: iana-registries
         run: |
           git add -A
-          git commit -m 'Import latest changes'
+          git commit -m "$(date -R -u)"
 
       - name: Git log
         if: steps.git_status.outputs.STATUS != ''
