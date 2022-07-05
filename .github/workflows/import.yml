@@ -69,8 +69,11 @@ jobs:
           git push --all -f
           git push --tags -f
 
+      - name: Checkout
+        uses: actions/checkout@v2
+
       # Keeping the GHA workflow alive
       - uses: gautamkrishnar/keepalive-workflow@v1
-        # with:
-        #   committer_username: ietf-bib-bot
-        #   committer_email: gh-bib-bot@llc.ietf.org
+        with:
+          committer_username: ietf-bib-bot
+          committer_email: gh-bib-bot@llc.ietf.org
