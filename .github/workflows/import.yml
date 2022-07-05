@@ -68,3 +68,9 @@ jobs:
         run: |
           git push --all -f
           git push --tags -f
+
+      # Keeping the GHA workflow alive
+      - uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          committer_username: ietf-bib-bot
+          committer_email: gh-bib-bot@llc.ietf.org
