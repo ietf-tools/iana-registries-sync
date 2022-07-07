@@ -15,20 +15,20 @@ jobs:
       - name: Checkout iana-registries repo
         uses: actions/checkout@v2
         with:
-          repository: ietf-ribose/iana-registries
-          token: ${{ secrets.IETF_RIBOSE_CI_PAT }}
+          repository: ietf-tools/iana-registries
+          token: ${{ secrets.IETF_BIB_BOT_PAT_IANA }}
           path: iana-registries
 
       - name: Setup Git
         run: |
-          git config --global user.name "ietf-ribose-ci"
-          git config --global user.email "ietf-ribose-ci@users.noreply.github.com"
+          git config --global user.name ietf-bib-bot
+          git config --global user.email gh-bib-bot@llc.ietf.org
 
       - name: Add GitHub remote to repo
         working-directory: iana-registries
         run: |
           git remote set-url origin \
-            https://${{ secrets.IETF_RIBOSE_CI_USERNAME }}:${{ secrets.IETF_RIBOSE_CI_PAT }}@github.com/ietf-ribose/iana-registries
+            https://ietf-bib-bot:${{ secrets.IETF_BIB_BOT_PAT_IANA }}@github.com/ietf-tools/iana-registries
 
       - name: Perform rsync from IANA
         working-directory: iana-registries
