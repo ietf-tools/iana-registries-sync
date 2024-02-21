@@ -12,6 +12,7 @@ jobs:
     name: Import ${{ matrix.target }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - source: assignments
