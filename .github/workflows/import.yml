@@ -1,23 +1,30 @@
-name: import
+name: Import from IANA
 
 on:
   push:
     branches: [ main ]
   schedule:
     - cron: '10 * * * *'  # every hour at *:10
+  workflow_dispatch:
 
 jobs:
   import:
-    name: import
+    name: Import ${{ matrix.target }}
     runs-on: ubuntu-latest
-    # continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        include:
+          - source: assignments
+            target: registries
+          - source: tz
+            target: timezone
     steps:
-      - name: Checkout iana-registries repo
-        uses: actions/checkout@v2
+      - name: Checkout iana-${{ matrix.target }} repo
+        uses: actions/checkout@v4
         with:
-          repository: ietf-tools/iana-registries
+          repository: ietf-tools/iana-${{ matrix.target }}
           token: ${{ secrets.IETF_BIB_BOT_PAT_IANA }}
-          path: iana-registries
+          path: iana-${{ matrix.target }}
 
       - name: Setup Git
         run: |
@@ -25,52 +32,57 @@ jobs:
           git config --global user.email gh-bib-bot@llc.ietf.org
 
       - name: Add GitHub remote to repo
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           git remote set-url origin \
-            https://ietf-bib-bot:${{ secrets.IETF_BIB_BOT_PAT_IANA }}@github.com/ietf-tools/iana-registries
+            https://ietf-bib-bot:${{ secrets.IETF_BIB_BOT_PAT_IANA }}@github.com/ietf-tools/iana-${{ matrix.target }}
 
       - name: Perform rsync from IANA
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           rsync -avciz --delete-before \
             --exclude '.git*' \
+            --exclude 'README' \
             --exclude 'README.*' \
-            rsync.iana.org::assignments .
+            rsync.iana.org::${{ matrix.source }} .
 
       - name: Git diff
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           git diff
 
       - name: Skip the rest if no changes
         id: git_status
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           echo ::set-output name=STATUS::$(git status --porcelain | tr -d [:space:])
 
       - name: Add changes
         if: steps.git_status.outputs.STATUS != ''
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           git add -A
           git commit -m "$(date -R -u)"
 
       - name: Git log
         if: steps.git_status.outputs.STATUS != ''
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           git log | head -100
 
-      - name: Git push to GitHub iana-registries
+      - name: Git push to GitHub iana-${{ matrix.target }}
         if: steps.git_status.outputs.STATUS != ''
-        working-directory: iana-registries
+        working-directory: iana-${{ matrix.target }}
         run: |
           git push --all -f
           git push --tags -f
 
+  workflowKeepalive:
+    name: Keep workflow alive
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # Keeping the GHA workflow alive
       - uses: gautamkrishnar/keepalive-workflow@v1
